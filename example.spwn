@@ -1,0 +1,39 @@
+gs = import "src/lib.spwn"
+
+pressing_p1 = counter(false)
+pressing_p2 = counter(false)
+
+pressing_p1_left = counter(false)
+pressing_p1_right = counter(false)
+
+pressing_p2_left = counter(false)
+pressing_p2_right = counter(false)
+
+
+pressing_p1.display(145, 45)
+pressing_p2.display(175, 45)
+
+pressing_p1_left.display(100, 15)
+pressing_p1_right.display(130, 15)
+
+pressing_p2_left.display(190, 15)
+pressing_p2_right.display(220, 15)
+
+
+gs.button_a(!{ pressing_p1 = true })
+gs.button_a_end(!{ pressing_p1 = false })
+
+gs.button_b(!{ pressing_p2 = true })
+gs.button_b_end(!{ pressing_p2 = false })
+
+gs.button_a_left(!{ pressing_p1_left = true })
+gs.button_a_left_end(!{ pressing_p1_left = false })
+
+gs.button_a_right(!{ pressing_p1_right = true })
+gs.button_a_right_end(!{ pressing_p1_right = false })
+
+gs.button_b_left(!{ pressing_p2_left = true })
+gs.button_b_left_end(!{ pressing_p2_left = false })
+
+gs.button_b_right(!{ pressing_p2_right = true })
+gs.button_b_right_end(!{ pressing_p2_right = false })
