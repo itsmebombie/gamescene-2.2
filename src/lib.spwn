@@ -1,4 +1,5 @@
 extract obj_props
+
 extract { // remove this once obj_props gets the 2.2 update
     HIDE_P1: @object_key::{id: 162, pattern: @number, name: "HIDE_P1"},
     HIDE_P2: @object_key::{id: 163, pattern: @number, name: "HIDE_P2"},
@@ -6,6 +7,7 @@ extract { // remove this once obj_props gets the 2.2 update
     EVENT_EXTRA_ID: @object_key::{id: 447, pattern: @number, name: "EVENT_EXTRA_ID"},
     EVENT_EXTRA_ID2: @object_key::{id: 525, pattern: @number, name: "EVENT_EXTRA_ID2"},
     EVENT_LIST: @object_key::{id: 430, pattern: @array|@string|@number, name: "EVENT_LIST"},
+    FREE_MODE: @object_key::{id: 111, pattern: @number, name:"FREE_MODE"}, // NEW
 }
 
 // convert to p1/p2
@@ -53,13 +55,56 @@ return {
     button_b_left_end: (g: p) => add(p2(ev_lup), g),
     button_b_right_end: (g: p) => add(p2(ev_rup), g),
 
-    init: (hide_players: @bool = true, disable_death_sfx: @bool = true) {
-        p = hide_players as @number
+    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true) {
+        plr = hide_players as @number
         $.add(obj{ // options
             OBJ_ID: 2899,
             X: -30, Y: 0,
-            HIDE_P1: p, HIDE_P2: p,
+            HIDE_P1: plr, HIDE_P2: plr,
             NO_DEATH_SFX: disable_death_sfx as @number,
         })
+
+        hide = ?g
+
+        $.add(obj{ // dual mode as 2.2 (free cam)
+            OBJ_ID: 286,
+            X: 0, Y: 15,
+            GROUPS: hide,
+            FREE_MODE: 1
+        })
+
+        $.add(obj{ // gravitation
+            OBJ_ID: 10,
+            X: 0, Y: 15,
+            GROUPS: hide,
+        })
+
+        if lock_players { // lock players movement
+            $.add(obj{
+                OBJ_ID: 1,
+                X: -30, Y:15,
+                GROUPS: hide
+            })
+
+            $.add(obj{
+                OBJ_ID: 1,
+                X: 30, Y:15,
+                GROUPS: hide
+            })
+
+            $.add(obj{
+                OBJ_ID: 1,
+                X: 0, Y:-15,
+                GROUPS: hide
+            })
+
+            $.add(obj{
+                OBJ_ID: 1,
+                X: 0, Y:45,
+                GROUPS: hide
+            })
+        }
+
+        hide.alpha(0)
     },
 }
