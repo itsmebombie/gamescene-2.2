@@ -7,15 +7,13 @@ extract { // remove this once obj_props gets the 2.2 update
     EVENT_EXTRA_ID: @object_key::{id: 447, pattern: @number, name: "EVENT_EXTRA_ID"},
     EVENT_EXTRA_ID2: @object_key::{id: 525, pattern: @number, name: "EVENT_EXTRA_ID2"},
     EVENT_LIST: @object_key::{id: 430, pattern: @array|@string|@number, name: "EVENT_LIST"},
-    FREE_MODE: @object_key::{id: 111, pattern: @number, name:"FREE_MODE"}, // NEW
+    FREE_MODE: @object_key::{id: 111, pattern: @number, name: "FREE_MODE"},
+    HIDE_OBJECT: @object_key::{id: 135, pattern: @bool, name: "HIDE_OBJECT"},
 }
 
 // convert to p1/p2
 p1 = e => e.with(EVENT_EXTRA_ID2, 1)
 p2 = e => e.with(EVENT_EXTRA_ID2, 2)
-
-// convert to start_group if its a function
-t = t => t.start_group if t.type == @trigger_function else t
 
 ev = obj{ // event obj
     OBJ_ID: 3604,
@@ -34,7 +32,7 @@ ev_rup = ev.with(EVENT_LIST, 74)
 p = @trigger_function|@group
 
 // add
-add = (b,g) => b.with(TARGET, t(g)).add()
+add = (b,g) => b.with(TARGET, g.start_group if g.type == @trigger_function else g).add()
 
 return {
     // g = group or trigger function, p = pattern
@@ -64,47 +62,27 @@ return {
             NO_DEATH_SFX: disable_death_sfx as @number,
         })
 
-        hide = ?g
-
-        $.add(obj{ // dual mode as 2.2 (free cam)
+        $.add(obj{ // dual mode portal w/ free cam
             OBJ_ID: 286,
             X: 0, Y: 15,
-            GROUPS: hide,
+            HIDE_OBJECT: true,
             FREE_MODE: 1
         })
 
-        $.add(obj{ // gravitation
+        $.add(obj{ // gravity portal
             OBJ_ID: 10,
             X: 0, Y: 15,
-            GROUPS: hide,
+            HIDE_OBJECT: true,
         })
 
         if lock_players { // lock players movement
-            $.add(obj{
-                OBJ_ID: 1,
-                X: -30, Y:15,
-                GROUPS: hide
-            })
-
-            $.add(obj{
-                OBJ_ID: 1,
-                X: 30, Y:15,
-                GROUPS: hide
-            })
-
-            $.add(obj{
-                OBJ_ID: 1,
-                X: 0, Y:-15,
-                GROUPS: hide
-            })
-
-            $.add(obj{
-                OBJ_ID: 1,
-                X: 0, Y:45,
-                GROUPS: hide
-            })
+            for pos in [[-30, 15], [30, 15], [0, -15], [0, 45]] {
+                $.add(obj{
+                    OBJ_ID: 1,
+                    X: pos[0], Y: pos[1],
+                    HIDE_OBJECT: true,
+                })
+            }
         }
-
-        hide.alpha(0)
     },
 }
