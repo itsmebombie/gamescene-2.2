@@ -20,7 +20,7 @@ Here, i will refer to the platformer buttons as "plat. buttons".
 - `button_a_right_end(target)` spawns the `target` every time the p1 right plat. button gets released.
 - `button_b_left_end(target)` spawns the `target` every time the p2 left plat. button gets released.
 - `button_b_right_end(target)` spawns the `target` every time the p2 right plat. button gets released.
-- `init(hide_players, disable_death_sfx)` hides the players and disables death sfx whether the corresponding options are set to true (they are true by default).
+- `init(hide_players, disable_death_sfx, lock_players)` hides/locs the players and disables death sfx whether the corresponding options are set to true (they are true by default).
 
 ## example
 
