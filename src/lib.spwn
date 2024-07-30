@@ -1,14 +1,15 @@
 extract obj_props
 
 extract { // remove this once obj_props gets the 2.2 update
-    HIDE_P1: @object_key::{id: 162, pattern: @number, name: "HIDE_P1"},
-    HIDE_P2: @object_key::{id: 163, pattern: @number, name: "HIDE_P2"},
-    NO_DEATH_SFX: @object_key::{id: 576, pattern: @number, name: "NO_DEATH_SFX"},
+    HIDE_P1: @object_key::{id: 162, pattern: @bool, name: "HIDE_P1"},
+    HIDE_P2: @object_key::{id: 163, pattern: @bool, name: "HIDE_P2"},
+    NO_DEATH_SFX: @object_key::{id: 576, pattern: @bool, name: "NO_DEATH_SFX"},
     EVENT_EXTRA_ID: @object_key::{id: 447, pattern: @number, name: "EVENT_EXTRA_ID"},
     EVENT_EXTRA_ID2: @object_key::{id: 525, pattern: @number, name: "EVENT_EXTRA_ID2"},
     EVENT_LIST: @object_key::{id: 430, pattern: @array|@string|@number, name: "EVENT_LIST"},
-    FREE_MODE: @object_key::{id: 111, pattern: @number, name: "FREE_MODE"},
+    FREE_MODE: @object_key::{id: 111, pattern: @bool, name: "FREE_MODE"},
     HIDE_OBJECT: @object_key::{id: 135, pattern: @bool, name: "HIDE_OBJECT"},
+    HIDE_ATTEMPTS: @object_key::{id: 532, pattern: @bool, name: "HIDE_ATTEMPTS"},
 }
 
 // convert to p1/p2
@@ -53,20 +54,26 @@ return {
     button_b_left_end: (g: p) => add(p2(ev_lup), g),
     button_b_right_end: (g: p) => add(p2(ev_rup), g),
 
-    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true) {
-        plr = hide_players as @number
+    init: (hide_players: @bool = true, disable_death_sfx: @bool = true, lock_players: @bool = true, hide_attempts: @bool = true) {
+        plr = hide_players
         $.add(obj{ // options
             OBJ_ID: 2899,
             X: -30, Y: 0,
             HIDE_P1: plr, HIDE_P2: plr,
-            NO_DEATH_SFX: disable_death_sfx as @number,
+            NO_DEATH_SFX: disable_death_sfx,
+            HIDE_ATTEMPTS: hide_attempts,
+        })
+
+        $.add(obj{ // no enter/exit effects
+            OBJ_ID: 1915,
+            X: -30, Y: 30,
         })
 
         $.add(obj{ // dual mode portal w/ free cam
             OBJ_ID: 286,
             X: 0, Y: 15,
             HIDE_OBJECT: true,
-            FREE_MODE: 1
+            FREE_MODE: true
         })
 
         $.add(obj{ // gravity portal
